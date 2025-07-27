@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mingau App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff66c4;
+      text-shadow: 0 0 10px #ff66c4;
+    }
+
+    .upload-box {
+      background-color: #222;
+      border: 2px dashed #ff66c4;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-upload {
+      padding: 10px 20px;
+      background-color: #ff66c4;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: black;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #preview {
+      max-width: 300px;
+      margin-top: 10px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    #generateBtn, #copyBtn, #botRaidBtn {
+      margin-top: 15px;
+      background-color: #00ffcc;
+      color: #000;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #cantada {
+      margin-top: 30px;
+      background: #111;
+      border-left: 4px solid #ff66c4;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      font-style: italic;
+      display: none;
+    }
+
+    #status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #00ffcc;
+    }
+
+    #modoInfo {
+      margin-top: 20px;
+      color: #888;
+    }
+
+    .modo-btns {
+      margin-bottom: 20px;
+    }
+
+    .modo-btns button {
+      margin: 0 10px;
+      background: #333;
+      border: 1px solid #888;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Mingau App – Cantadas por Imagem</h1>
+
+  <div class="modo-btns">
+    <button onclick="setModo('celular')">📱 Celular</button>
+    <button onclick="setModo('pc')">💻 Computador</button>
+  </div>
+
+  <div id="modoInfo">🔍 Modo não selecionado</div>
+
+  <div class="upload-box">
+    <label class="custom-upload" for="fileInput">📷 Enviar imagem da conversa</label>
+    <input type="file" id="fileInput" accept="image/*">
+    <br>
+    <img id="preview" src="#" alt="Prévia da imagem" />
+  </div>
+
+  <button id="generateBtn">✨ Gerar Cantada com base na imagem</button>
+
+  <div id="cantada">
+    <p id="cantadaTexto">...</p>
+    <button id="copyBtn">📋 Copiar Cantada</button>
+  </div>
+
+  <p id="status"></p>
+
+  <button id="botRaidBtn" onclick="window.open('https://miguel918-hub.github.io/Hyder-Raids/', '_blank')">🚀 Bot Raid Discord</button>
+
+  <script>
+    let modoSelecionado = "";
+
+    function setModo(modo) {
+      modoSelecionado = modo;
+      document.getElementById("modoInfo").textContent = "🧭 Modo atual: " + (modo === "pc" ? "Computador" : "Celular");
+
+      if (modo === "pc") {
+        document.body.style.fontSize = "18px";
+      } else {
+        document.body.style.fontSize = "15px";
+      }
+    }
+
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const generateBtn = document.getElementById("generateBtn");
+    const cantadaDiv = document.getElementById("cantada");
+    const cantadaTexto = document.getElementById("cantadaTexto");
+    const copyBtn = document.getElementById("copyBtn");
+    const status = document.getElementById("status");
+
+    fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    generateBtn.addEventListener("click", function () {
+      if (!fileInput.files[0]) {
+        status.textContent = "❌ Por favor, envie uma imagem da conversa.";
+        return;
+      }
+
+      status.textContent = "⏳ Analisando imagem...";
+
+      setTimeout(() => {
+        const cantadas = [
+          "Se essa conversa fosse uma música, eu seria o refrão: grudado em você! 🎶💘",
+          "Seu chat devia estar no museu: é arte pura com você ali! 🖼️😍",
+          "Se toda conversa tivesse você, eu nunca deixava o modo online! 🟢💬",
+          "Você não é digitando... é digitando meu coração! 💓📱"
+        ];
+        const aleatoria = cantadas[Math.floor(Math.random() * cantadas.length)];
+        cantadaTexto.textContent = aleatoria;
+        cantadaDiv.style.display = "block";
+        status.textContent = "✅ Cantada gerada com sucesso!";
+      }, 2000);
+    });
+
+    copyBtn.addEventListener("click", function () {
+      navigator.clipboard.writeText(cantadaTexto.textContent).then(() => {
+        status.textContent = "📋 Cantada copiada!";
+      });
+    });
+  </script>
+</body>
+</html>
